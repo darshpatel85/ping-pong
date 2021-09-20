@@ -1,0 +1,72 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client </title>
+    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"
+        integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:400,900);
+
+        body,
+        html {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            background-color: #000000;
+        }
+
+        .main {
+            position: absolute;
+            background-color: #ccc;
+            border: solid 1px #ccc;
+            width: 20px;
+            height: 100px;
+            border-radius: 15%;
+        }
+        .oppo {
+            position: absolute;
+            background-color: rgb(233, 143, 143);
+            border: solid 1px rgb(233, 143, 143);
+            width: 20px;
+            height: 100px;
+            border-radius: 15%;
+        }
+    </style>
+</head>
+
+<body>
+    <span id="main" class="main"></span>
+    <span id="oppo" class="oppo"></span>
+    <script>
+         var yp1 = 0, yp2 = 0;
+        const socket = io('http://localhost:3000');
+        socket.on("playerposition", (arg) => {
+                yp1 += ((arg.player1 - yp1) / 6);
+                yp2 += ((arg.player2 - yp2) / 6);
+                $("#main").css({ left: 40 + 'px', top: yp1 + 'px' });
+                $("#oppo").css({ right: 40 + 'px', top: yp2 + 'px' });
+            });
+        jQuery(document).ready(function () {
+            $(document).mousemove(function (e) {
+                socket.emit("sendposition", { player1 : e.pageY });
+            });
+
+
+            
+
+
+        });
+    </script>
+
+
+
+</body>
+
+</html>
